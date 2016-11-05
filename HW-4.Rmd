@@ -1,6 +1,6 @@
 ---
 title: "MATH 216 Homework 4"
-author: "WRITE YOUR NAME HERE"
+author: "Alexander Pastora"
 output:
   html_document:
     toc: true
@@ -16,6 +16,7 @@ library(USAboundaries)
 library(maptools)
 library(sp)
 library(broom)
+
 ```
 
 
@@ -24,10 +25,10 @@ library(broom)
 
 Please indicate
 
-* Who you collaborated with:
-* Roughly how much time you spent on this HW so far:
-* The URL of the RPubs published URL [here](https://www.nhl.com/).
-* What gave you the most trouble:
+* Who you collaborated with: Nobody
+* Roughly how much time you spent on this HW so far: 4 hours
+* The URL of the RPubs published URL [here](http://rpubs.com/pinkfan9999/HW-4).
+* What gave you the most trouble: Figuring out how to calculate distance.
 * Any comments you have:
 
 
@@ -43,11 +44,32 @@ which is marked on the map with a large red dot.
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=4.5}
 # Perform your computations here:
+#Extrac County Data
+counties_sp <- us_counties() 
+counties_data <- counties_sp@data
+counties_polygons <- tidy(counties_sp, region="geoid")
+counties <- left_join(counties_data, counties_polygons, by=c("geoid"="id"))
+geo_data <- counties %>% filter( !state_name %in% c("Alaska", "Hawaii", "Puerto Rico"))
+
+
+geo_data%>% 
+  select(long) %>% 
+  summary()
+geo_data %>% 
+  select(lat) %>% 
+  summary()
+
+geo_data <- geo_data %>% mutate(change_in_long = long- (-92.27))
+geo_data <- geo_data %>% mutate(square_change_long = (change_in_long)^2)
+geo_data <- geo_data %>% mutate(change_in_lat = lat - 38.31)
+geo_data <- geo_data %>% mutate(square_change_lat = (change_in_lat)^2)
+geo_data <- geo_data %>% mutate(distance = sqrt(square_change_long+square_change_lat))
 
 ```
 
+Mean longitude and latitude used as the location for the hub.
 
-```{r, eval=FALSE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=4.5}
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=4.5}
 # Here is a template of a ggplot call; feel free to change this to suit your
 # needs. Once your computations above are complete, set the eval=TRUE on the
 # line above to tell R Markdown to run this code block.
@@ -58,7 +80,7 @@ ggplot(data=geo_data, aes(x=long, y=lat, group=group, fill=distance)) +
   # Trace outlines of areas
   geom_path(size=0.1) +
   # Mark hub
-  annotate("point", x=hub_x_coord, y=hub_y_coord, col="red", size=5) +
+  annotate("point", x=-92.27, y=38.31, col="red", size=5) +
   # Correct aspect ratio for map
   coord_map()
 ```
