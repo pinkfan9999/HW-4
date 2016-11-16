@@ -59,6 +59,7 @@ geo_data %>%
   select(lat) %>% 
   summary()
 
+# The location of the hub was determined by taking the mean of all the counties. However, this also assumes that populations are evenly distributed. 
 geo_data <- geo_data %>% mutate(change_in_long = long- (-92.27))
 geo_data <- geo_data %>% mutate(square_change_long = (change_in_long)^2)
 geo_data <- geo_data %>% mutate(change_in_lat = lat - 38.31)
