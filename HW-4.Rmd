@@ -26,9 +26,9 @@ library(broom)
 Please indicate
 
 * Who you collaborated with: Nobody
-* Roughly how much time you spent on this HW so far: 4 hours
+* Roughly how much time you spent on this HW so far: 5 hours
 * The URL of the RPubs published URL [here](http://rpubs.com/pinkfan9999/HW-4).
-* What gave you the most trouble: Figuring out how to calculate distance.
+* What gave you the most trouble: 
 * Any comments you have:
 
 
